@@ -3,7 +3,7 @@ title: "Time line plots"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
-    vertical_layout: fill
+    vertical_layout: scroll
 ---
 
 ```{r setup, include=FALSE}
@@ -11,9 +11,6 @@ library(flexdashboard)
 library(ggplot2)
 library(tidyverse)
 ```
-
-Column {data-width=650}
------------------------------------------------------------------------
 
 ### Quantities of lobster landed on the East coast
 
@@ -35,9 +32,6 @@ figlandings<- ggplot(data=eastcoastlandings, aes(x=Year, y=Landings_MT)) +
   theme(axis.text.x = element_text(size= 9, angle = 270, hjust = 0.75))
 figlandings
 ```
-
-Column {data-width=650}
------------------------------------------------------------------------
 
 ### Value of exports of lobster
 
@@ -63,3 +57,24 @@ figexport<- ggplot(data=exportlong, aes(x=Year, y=value)) +
 figexport
 ```
 
+### Lobster landings by LFA
+
+```{r}
+lfalandings <- read.csv("LandingsLFA.csv")
+lfalandingsWide<-   gather(lfalandings, key = "Location", value = "Landings", 2:16)
+#if a subset of LFAs to be shown:
+subsetlfalandingsWide<- subset(lfalandingsWide, Location!="LFA31A" & Location!="LFA31B")
+
+figlafalandings <- ggplot(data=subsetlfalandingsWide, aes(YR, Landings,  colour=Location)) +
+geom_line(size=0.75, alpha=0.7)  +  theme(legend.position="bottom") +
+  labs(x = "Year", y="Volume in metric tonnes") +
+  theme(axis.text = element_text(size = 12)) +       
+  theme(axis.title = element_text(size = 14))  +    
+  theme(
+    panel.border = element_blank(),  
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(),
+    axis.line = element_line(colour = "black"))
+figlafalandings
+    ```
