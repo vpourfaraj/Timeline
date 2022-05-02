@@ -3,7 +3,7 @@ title: "Time line plots"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
-    vertical_layout: scroll
+    vertical_layout: fill
 ---
 
 ```{r setup, include=FALSE}
@@ -12,6 +12,8 @@ library(ggplot2)
 library(tidyverse)
 ```
 
+ {.tabset} 
+---------------------------------------------------
 ### Quantities of lobster landed on the East coast
 
 ```{r}
