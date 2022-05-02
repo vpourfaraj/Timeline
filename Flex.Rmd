@@ -1,0 +1,65 @@
+---
+title: "Time line plots"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(ggplot2)
+library(tidyverse)
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Quantities of lobster landed on the East coast
+
+```{r}
+eastcoastlandings <- read.csv("LandingsCanada.csv")
+eastcoastlandings<- rename(eastcoastlandings, Year= ï..Year, 
+                           Landings_MT= Landings.MT.)
+
+figlandings<- ggplot(data=eastcoastlandings, aes(x=Year, y=Landings_MT)) +
+  geom_bar(stat="identity", fill="coral2") +
+  labs(x= "", y="Volume in metrci tonnes") +
+  scale_x_continuous(breaks = seq(1893, 2020, by = 7)) + 
+  theme(
+    panel.border = element_blank(),  
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(),
+    axis.line = element_line(colour = "black")) +
+  theme(axis.text.x = element_text(size= 9, angle = 270, hjust = 0.75))
+figlandings
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Value of exports of lobster
+
+```{r}
+nsectiondata<- read.csv("Nsection.csv")
+nsectiondata<- rename(nsectiondata, Year= ï..year, 
+                           Fresh=fresh.export, Canned=canned.export, Total=total.export)
+
+export<- select(nsectiondata, -2)
+exportlong<- gather(export, key = "Type", value="Export value", 2:4)
+exportlong <- rename(exportlong, value=`Export value`)
+
+figexport<- ggplot(data=exportlong, aes(x=Year, y=value)) +
+  geom_line(aes(color=Type), size=1.5) +
+  labs(x= "", y="Value in thousands of dollars", color="") +
+  theme(
+    panel.border = element_blank(),  
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(),
+    axis.line = element_line(colour = "black"),
+    legend.position = "bottom") 
+figexport
+```
+
